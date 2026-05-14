@@ -29,7 +29,13 @@ async function handleRoute() {
   updateNav(name);
   const handler = routes[name];
   if (handler) {
-    await handler(params);
+    try {
+      await handler(params);
+    } catch (err) {
+      document.getElementById('app').innerHTML =
+        `<p class="empty">頁面載入失敗，請重新整理。</p>`;
+      console.error(err);
+    }
   } else {
     document.getElementById('app').innerHTML =
       `<p class="empty">找不到頁面：${name}</p>`;

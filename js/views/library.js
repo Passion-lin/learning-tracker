@@ -1,5 +1,5 @@
 import { getAllEntries } from '../db.js';
-import { typeIcon, formatDate } from '../utils.js';
+import { typeIcon, formatDate, escHtml } from '../utils.js';
 import { navigate } from '../router.js';
 
 export async function renderLibrary() {
@@ -28,8 +28,8 @@ export async function renderLibrary() {
           <div class="entry-item" data-id="${e.id}" style="cursor:pointer">
             <span class="entry-icon">${typeIcon(e.type)}</span>
             <div class="entry-info">
-              <div class="entry-title">${e.title}</div>
-              <div class="entry-meta">${e.creator || ''}${e.completedDate ? '　' + formatDate(e.completedDate) : ''}</div>
+              <div class="entry-title">${escHtml(e.title)}</div>
+              <div class="entry-meta">${escHtml(e.creator || '')}${e.completedDate ? '　' + formatDate(e.completedDate) : ''}</div>
             </div>
             <span class="badge ${e.status === 'completed' ? 'badge-done' : 'badge-progress'}">
               ${e.status === 'completed' ? '完成' : '進行中'}

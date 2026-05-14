@@ -39,3 +39,7 @@ export function starsHTML(rating) {
     `<span class="star ${i < rating ? 'filled' : ''}">★</span>`
   ).join('');
 }
+
+export function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}

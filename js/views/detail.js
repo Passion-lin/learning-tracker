@@ -1,5 +1,5 @@
 import { getEntry, deleteEntry } from '../db.js';
-import { typeLabel, starsHTML, formatDate } from '../utils.js';
+import { typeLabel, starsHTML, formatDate, escHtml } from '../utils.js';
 import { navigate } from '../router.js';
 
 export async function renderDetail(id) {
@@ -13,12 +13,12 @@ export async function renderDetail(id) {
   app.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
       <button id="btn-back" style="background:none;border:none;font-size:20px;cursor:pointer">←</button>
-      <h1 style="margin:0;flex:1">${e.title}</h1>
+      <h1 style="margin:0;flex:1">${escHtml(e.title)}</h1>
     </div>
 
     <div class="card">
       <p style="color:var(--text-muted);font-size:13px;margin-bottom:4px">${typeLabel(e.type)}</p>
-      ${e.creator ? `<p style="margin-bottom:8px">${e.creator}</p>` : ''}
+      ${e.creator ? `<p style="margin-bottom:8px">${escHtml(e.creator)}</p>` : ''}
       <span class="badge ${e.status === 'completed' ? 'badge-done' : 'badge-progress'}" style="margin-bottom:12px;display:inline-block">
         ${e.status === 'completed' ? '已完成' : '進行中'}
       </span>
@@ -29,7 +29,7 @@ export async function renderDetail(id) {
     ${e.notes ? `
       <div class="card">
         <h2>心得筆記</h2>
-        <p style="white-space:pre-wrap;line-height:1.7">${e.notes}</p>
+        <p style="white-space:pre-wrap;line-height:1.7">${escHtml(e.notes)}</p>
       </div>
     ` : ''}
 

@@ -1,5 +1,5 @@
 import { addEntry, getEntry, updateEntry } from '../db.js';
-import { uuid, today } from '../utils.js';
+import { uuid, today, escHtml } from '../utils.js';
 import { navigate } from '../router.js';
 
 export async function renderForm(id) {
@@ -112,6 +112,3 @@ export async function renderForm(id) {
   });
 }
 
-function escHtml(str) {
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
