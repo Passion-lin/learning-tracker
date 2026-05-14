@@ -49,6 +49,8 @@ body {
   padding: 8px 16px;
 }
 
+.nav-item::before { content: attr(data-icon); font-size: 20px; }
+
 .nav-item.active { color: var(--primary); font-weight: 600; }
 
 .nav-add {

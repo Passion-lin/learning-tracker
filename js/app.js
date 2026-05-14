@@ -9,7 +9,7 @@ async function main() {
   await initDB();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
   initRouter({
@@ -21,4 +21,7 @@ async function main() {
   });
 }
 
-main();
+main().catch(err => {
+  document.getElementById('app').textContent = '載入失敗，請重新整理。';
+  console.error(err);
+});
