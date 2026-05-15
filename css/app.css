@@ -1,11 +1,11 @@
 :root {
-  --primary: #4f46e5;
-  --primary-light: #eef2ff;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --bg: #f8fafc;
-  --card-bg: #ffffff;
-  --border: #e2e8f0;
+  --primary: #8fa89a;
+  --primary-light: #eaf0ed;
+  --text: #333a35;
+  --text-muted: #7a8a80;
+  --bg: #f6f5f0;
+  --card-bg: #fefcf8;
+  --border: #e0ddd6;
   --radius: 12px;
   --nav-h: 64px;
 }
@@ -173,8 +173,8 @@ textarea { min-height: 100px; resize: vertical; }
   font-weight: 600;
 }
 
-.badge-progress { background: #fef3c7; color: #92400e; }
-.badge-done     { background: #d1fae5; color: #065f46; }
+.badge-progress { background: #f5eed8; color: #7a6840; }
+.badge-done     { background: #dde9e4; color: #3d6454; }
 
 .filter-row {
   display: flex;
