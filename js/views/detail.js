@@ -1,5 +1,5 @@
 import { getEntry, deleteEntry } from '../db.js';
-import { typeLabel, starsHTML, formatDate, escHtml } from '../utils.js';
+import { typeLabel, starsHTML, formatDate, escHtml, showConfirm } from '../utils.js';
 import { navigate } from '../router.js';
 
 export async function renderDetail(id) {
@@ -22,8 +22,14 @@ export async function renderDetail(id) {
       <span class="badge ${e.status === 'completed' ? 'badge-done' : 'badge-progress'}" style="margin-bottom:12px;display:inline-block">
         ${e.status === 'completed' ? '已完成' : '進行中'}
       </span>
+      ${e.startDate ? `<p style="font-size:14px;color:var(--text-muted)">開始日期：${formatDate(e.startDate)}</p>` : ''}
       ${e.completedDate ? `<p style="font-size:14px;color:var(--text-muted)">完成日期：${formatDate(e.completedDate)}</p>` : ''}
       ${e.rating ? `<div class="stars" style="margin-top:12px;font-size:20px">${starsHTML(e.rating)}</div>` : ''}
+      ${(e.tags && e.tags.length) ? `
+        <div class="tags-wrap" style="margin-top:12px">
+          ${e.tags.map(t => `<span class="tag-chip-view">${escHtml(t)}</span>`).join('')}
+        </div>
+      ` : ''}
     </div>
 
     ${e.notes ? `
@@ -40,7 +46,8 @@ export async function renderDetail(id) {
   document.getElementById('btn-back').addEventListener('click', () => history.back());
   document.getElementById('btn-edit').addEventListener('click', () => navigate(`edit?id=${id}`));
   document.getElementById('btn-delete').addEventListener('click', async () => {
-    if (confirm(`確定要刪除「${e.title}」？`)) {
+    const ok = await showConfirm('刪除紀錄', `確定要刪除「${e.title}」？此動作無法復原。`);
+    if (ok) {
       await deleteEntry(id);
       navigate('library');
     }

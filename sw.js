@@ -1,4 +1,4 @@
-const CACHE = 'learning-tracker-v2';
+const CACHE = 'learning-tracker-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,7 @@ const ASSETS = [
   './js/views/form.js',
   './js/views/library.js',
   './js/views/detail.js',
+  './js/views/settings.js',
   './manifest.json'
 ];
 

@@ -211,3 +211,37 @@ h1 { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
 h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
 
 .empty { text-align: center; color: var(--text-muted); padding: 40px 0; }
+
+/* === 進度條 === */
+.progress-section { margin-bottom: 20px; }
+.progress-item { margin-bottom: 12px; }
+.progress-label { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+.progress-bar-wrap { background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--primary); border-radius: 99px; transition: width 0.4s ease; }
+.progress-bar-fill.complete { background: #5a7a6a; }
+.progress-stat { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* === 標籤 chips === */
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; background: var(--primary-light);
+  color: var(--text); border-radius: 99px; font-size: 12px; font-weight: 500;
+}
+.tag-chip-view { padding: 3px 10px; background: var(--primary-light); color: var(--text); border-radius: 99px; font-size: 12px; }
+.tag-remove { background: none; border: none; cursor: pointer; padding: 0; font-size: 15px; line-height: 1; color: var(--text-muted); }
+.tag-input-area { border: 1px solid var(--border); border-radius: 8px; padding: 8px; background: var(--bg); }
+.tag-input-field { border: none; background: transparent; font-size: 14px; outline: none; width: 120px; }
+.tag-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag-suggestion { padding: 3px 10px; border-radius: 99px; border: 1px dashed var(--border); background: var(--card-bg); font-size: 12px; cursor: pointer; color: var(--text-muted); }
+
+/* === 自訂 modal === */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; padding: 16px;
+}
+.modal-box { background: var(--card-bg); border-radius: var(--radius); padding: 24px; max-width: 320px; width: 100%; }
+.modal-box h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.modal-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+.modal-actions { display: flex; flex-direction: column; gap: 8px; }

@@ -1,10 +1,13 @@
-import { addEntry, getEntry, updateEntry } from '../db.js';
+import { addEntry, getEntry, updateEntry, getAllEntries } from '../db.js';
 import { uuid, today, escHtml } from '../utils.js';
 import { navigate } from '../router.js';
 
 export async function renderForm(id) {
   const app = document.getElementById('app');
   const editing = !!id;
+  const allEntries = await getAllEntries();
+  const allUsedTags = [...new Set(allEntries.flatMap(e => e.tags || []))].sort();
+
   let entry = editing
     ? await getEntry(id)
     : { id: uuid(), type: 'book', title: '', creator: '', status: 'in_progress',
@@ -51,6 +54,15 @@ export async function renderForm(id) {
     </div>
 
     <div class="form-group">
+      <label>標籤</label>
+      <div class="tag-input-area">
+        <div class="tags-wrap" id="tags-selected"></div>
+        <input class="tag-input-field" id="tag-input" type="text" placeholder="輸入後按 Enter 新增…" />
+      </div>
+      <div class="tag-suggestions" id="tag-suggestions"></div>
+    </div>
+
+    <div class="form-group">
       <label>心得筆記</label>
       <textarea id="f-notes" placeholder="選填">${escHtml(entry.notes)}</textarea>
     </div>
@@ -61,6 +73,45 @@ export async function renderForm(id) {
 
   let currentType = entry.type;
   let currentRating = entry.rating;
+  let currentTags = [...(entry.tags || [])];
+
+  function renderTagUI() {
+    const selectedEl = document.getElementById('tags-selected');
+    const suggestEl  = document.getElementById('tag-suggestions');
+    if (!selectedEl || !suggestEl) return;
+
+    selectedEl.innerHTML = currentTags.map(t =>
+      `<span class="tag-chip">${escHtml(t)}<button class="tag-remove" data-tag="${escHtml(t)}" type="button">×</button></span>`
+    ).join('');
+    selectedEl.querySelectorAll('.tag-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentTags = currentTags.filter(t => t !== btn.dataset.tag);
+        renderTagUI();
+      });
+    });
+
+    const unused = allUsedTags.filter(t => !currentTags.includes(t));
+    suggestEl.innerHTML = unused.map(t =>
+      `<span class="tag-suggestion" data-tag="${escHtml(t)}">${escHtml(t)}</span>`
+    ).join('');
+    suggestEl.querySelectorAll('.tag-suggestion').forEach(el => {
+      el.addEventListener('click', () => {
+        if (!currentTags.includes(el.dataset.tag)) currentTags.push(el.dataset.tag);
+        renderTagUI();
+      });
+    });
+  }
+
+  renderTagUI();
+
+  document.getElementById('tag-input').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ',') return;
+    e.preventDefault();
+    const val = e.target.value.trim().slice(0, 20);
+    if (val && !currentTags.includes(val)) currentTags.push(val);
+    e.target.value = '';
+    renderTagUI();
+  });
 
   document.getElementById('btn-book').addEventListener('click', () => {
     currentType = 'book';
@@ -75,8 +126,12 @@ export async function renderForm(id) {
   });
 
   document.getElementById('f-status').addEventListener('change', (e) => {
-    document.getElementById('g-completed').style.display =
-      e.target.value === 'completed' ? '' : 'none';
+    const isCompleted = e.target.value === 'completed';
+    document.getElementById('g-completed').style.display = isCompleted ? '' : 'none';
+    if (isCompleted) {
+      const dateField = document.getElementById('f-completed');
+      if (!dateField.value) dateField.value = today();
+    }
   });
 
   document.getElementById('stars').addEventListener('click', (e) => {
@@ -101,6 +156,7 @@ export async function renderForm(id) {
       completedDate: document.getElementById('f-completed')?.value || '',
       rating: currentRating,
       notes: document.getElementById('f-notes').value.trim(),
+      tags: currentTags,
     };
 
     editing ? await updateEntry(updated) : await addEntry(updated);

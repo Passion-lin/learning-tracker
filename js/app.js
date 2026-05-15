@@ -4,6 +4,7 @@ import { renderDashboard } from './views/dashboard.js';
 import { renderLibrary } from './views/library.js';
 import { renderForm } from './views/form.js';
 import { renderDetail } from './views/detail.js';
+import { renderSettings } from './views/settings.js';
 
 async function main() {
   await initDB();
@@ -18,6 +19,7 @@ async function main() {
     add:       () => renderForm(),
     edit:      (params) => renderForm(params.id),
     detail:    (params) => renderDetail(params.id),
+    settings:  () => renderSettings(),
   });
 }
 

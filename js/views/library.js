@@ -9,7 +9,10 @@ export async function renderLibrary() {
 
   let filterType   = 'all';
   let filterStatus = 'all';
+  let filterTag    = 'all';
   let query = '';
+
+  const allTags = [...new Set(entries.flatMap(e => e.tags || []))].sort();
 
   function filtered() {
     return entries.filter(e => {
@@ -17,6 +20,7 @@ export async function renderLibrary() {
       if (filterStatus !== 'all' && e.status !== filterStatus) return false;
       if (query && !e.title.toLowerCase().includes(query.toLowerCase()) &&
                    !(e.creator || '').toLowerCase().includes(query.toLowerCase())) return false;
+      if (filterTag !== 'all' && !(e.tags || []).includes(filterTag)) return false;
       return true;
     });
   }
@@ -65,6 +69,14 @@ export async function renderLibrary() {
       <button class="filter-chip" id="chip-progress">進行中</button>
       <button class="filter-chip" id="chip-done">已完成</button>
     </div>
+    ${allTags.length ? `
+    <div style="margin-bottom:16px">
+      <select id="tag-filter" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);font-size:14px;background:var(--bg);color:var(--text)">
+        <option value="all">所有標籤</option>
+        ${allTags.map(t => `<option value="${escHtml(t)}">${escHtml(t)}</option>`).join('')}
+      </select>
+    </div>
+    ` : ''}
     <div class="card" id="list-area"></div>
   `;
 
@@ -79,4 +91,11 @@ export async function renderLibrary() {
   document.getElementById('chip-status-all').addEventListener('click', () => { filterStatus = 'all';         render(); });
   document.getElementById('chip-progress').addEventListener('click',   () => { filterStatus = 'in_progress'; render(); });
   document.getElementById('chip-done').addEventListener('click',       () => { filterStatus = 'completed';   render(); });
+
+  if (allTags.length) {
+    document.getElementById('tag-filter').addEventListener('change', (e) => {
+      filterTag = e.target.value;
+      render();
+    });
+  }
 }
